@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KRYON — Enterprise AI Security Command Center</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="app-container">
+
+        <!-- Left Sidebar Navigation -->
+        <aside class="sidebar" id="app-sidebar">
+            <div class="sidebar-header">
+                <div class="brand-wrapper">
+                    <div class="brand-icon">K</div>
+                    <span class="brand-name">KRYON</span>
+                </div>
+                <button class="sidebar-toggle-btn" id="sidebar-toggle" title="Toggle Sidebar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="11 17 6 12 11 7"></polyline><polyline points="18 17 13 12 18 7"></polyline></svg>
+                </button>
+            </div>
+
+            <nav class="nav-menu">
+                <a class="nav-item active" id="nav-mode-1">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    <span>Mode 1: Standard Chat</span>
+                </a>
+                <a class="nav-item" id="nav-mode-2">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                    <span>Mode 2: Puppeteering</span>
+                </a>
+            </nav>
+
+            <div class="history-section">
+                <span class="history-title">Recent Audits</span>
+                <div class="history-list">
+                    <div class="history-item" data-chat-id="1">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        <span>Target-Alpha Audit Logs</span>
+                    </div>
+                    <div class="history-item" data-chat-id="2">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        <span>Active Directory Analysis</span>
+                    </div>
+                    <div class="history-item" data-chat-id="3">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        <span>Shodan Recon Findings</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="avatar">AN</div>
+                <span class="sidebar-footer-text">Analyst Mode</span>
+            </div>
+        </aside>
+
+        <!-- Main Panel Viewport -->
+        <main class="main-viewport">
+
+            <!-- Global Mode Header -->
+            <header class="global-header">
+                <div class="header-left">
+                    <span class="mode-title" id="global-mode-indicator">MODE 1 // STANDARD CHAT</span>
+                </div>
+                <div class="mode-selector">
+                    <button class="mode-btn active" id="toggle-chat-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        Chat
+                    </button>
+                    <button class="mode-btn" id="toggle-puppeteer-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                        Puppeteering
+                    </button>
+                </div>
+            </header>
+
+            <!-- Workspaces -->
+            <div class="workspace">
+
+                <!-- MODE 1: Standard Chat Workspace -->
+                <div class="workspace-panel active" id="chat-workspace">
+                    <div class="chat-center-column">
+                        <div class="chat-messages" id="chat-feed">
+                            <div class="chat-wrapper">
+                                <div class="message system">
+                                    <div class="avatar" style="background-color: var(--text-accent);">K</div>
+                                    <div class="message-content">
+                                        <span class="message-sender">KRYON Core</span>
+                                        <div class="message-bubble">
+                                            Hello. I am KRYON. I am ready to assist with standard queries or run automated security operations. Ask a question here, or toggle **Mode 2: Puppeteering** above to coordinate specialized autonomous agents.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Input Box Area -->
+                        <div class="chat-input-area">
+                            <div class="input-container">
+                                <div class="attachment-preview-container" id="attachment-preview">
+                                    <div class="attachment-badge">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+                                        <span id="attachment-name">target_ips.txt</span>
+                                        <span class="attachment-remove" id="attachment-remove-btn">&times;</span>
+                                    </div>
+                                </div>
+                                <textarea class="chat-input-textarea" id="chat-input" placeholder="Type a message or load a playbook (Ctrl + Enter to send)..." rows="1"></textarea>
+                                <div class="chat-input-controls">
+                                    <div class="input-actions-left">
+                                        <button class="input-action-btn" id="attach-btn" title="Attach file">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+                                        </button>
+                                        <button class="input-action-btn" id="citation-toggle-btn" title="View references">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                                        </button>
+                                    </div>
+                                    <span class="input-meta-hint">Press Enter to Send</span>
+                                    <button class="send-btn" id="chat-send-btn">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                                        Send
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Sidebar context panel -->
+                    <aside class="right-sidebar" id="chat-right-panel">
+                        <div class="sidebar-right-header">
+                            <span class="sidebar-right-title">Intelligence Context</span>
+                            <button class="sidebar-toggle-btn" id="close-citations" title="Collapse panel">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                            </button>
+                        </div>
+                        <div class="right-sidebar-content">
+                            <div>
+                                <h4 class="context-section-title">Reference Citations</h4>
+                                <div class="citation-card">
+                                    <span class="citation-source">CVE-2023-49103</span>
+                                    <span class="citation-title">ownCloud Graph API Vulnerability</span>
+                                    <p class="citation-snippet">A critical security vulnerability allows unauthorized retrieval of system environment configurations, exposing administrator passwords and mail credentials.</p>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="context-section-title">Active Target Profile</h4>
+                                <div class="citation-card">
+                                    <span class="citation-source">Target-Alpha</span>
+                                    <span class="citation-title">External IP Range</span>
+                                    <p class="citation-snippet">Scope limited to 192.168.42.0/24 subnet. 8 active nodes detected. Port 8080 identified running Apache services.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+
+                <!-- MODE 2: Puppeteering Workspace -->
+                <div class="workspace-panel" id="puppeteer-workspace">
+
+                    <!-- Left: Interactive Canvas (Orchestrator Canvas) -->
+                    <div class="puppeteer-left-panel" id="orchestrator-split-left">
+                        <!-- Global Operation Header -->
+                        <div class="puppeteer-header">
+                            <div class="opp-metadata">
+                                <div class="opp-meta-item">
+                                    <span class="opp-meta-label">Mode 2</span>
+                                    <span class="opp-meta-val" style="letter-spacing: 0.8px; font-weight: 700;">PUPPETEERING</span>
+                                </div>
+                                <div class="opp-meta-item">
+                                    <span class="opp-meta-label">Target</span>
+                                    <span class="opp-meta-val" id="header-target">None Configured</span>
+                                </div>
+                                <div class="opp-meta-item">
+                                    <span class="opp-meta-label">Operation</span>
+                                    <span class="opp-meta-val">External Assessment</span>
+                                </div>
+                                <div class="opp-meta-item">
+                                    <span class="opp-meta-label">Status</span>
+                                    <span class="opp-meta-val" id="header-status">● IDLE</span>
+                                </div>
+                                <div class="opp-meta-item">
+                                    <span class="opp-meta-label">Elapsed</span>
+                                    <span class="opp-meta-val" id="header-clock">00:00</span>
+                                </div>
+                                <div class="opp-meta-item">
+                                    <span class="opp-meta-label">Agents</span>
+                                    <span class="opp-meta-val" id="header-agents">0 / 8 ACTIVE</span>
+                                </div>
+                            </div>
+
+                            <div class="opp-controls">
+                                <button class="opp-btn launch-btn" id="op-btn-launch">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                                    Launch Cyber-Run
+                                </button>
+                                <button class="opp-btn" id="op-btn-pause" disabled>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+                                    Pause
+                                </button>
+                                <button class="opp-btn" id="op-btn-stop" disabled>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18"></rect></svg>
+                                    Stop
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Canvas Ring View -->
+                        <div class="orchestrator-canvas" id="canvas-view">
+                            <!-- SVG Tentacles overlay -->
+                            <svg class="tentacle-svg-overlay" id="tentacle-canvas">
+                                <!-- Paths will be mapped and drawn by index.js -->
+                            </svg>
+
+                            <!-- Playbook Configuration Form Panel (Visible when Idle) -->
+                            <div class="playbook-setup-card" id="playbook-setup-panel">
+                                <div class="setup-header">
+                                    <h3>Deploy Autonomous Pipeline</h3>
+                                    <p>Configure targets, scope matrices, and operational limitations below.</p>
+                                </div>
+                                <div class="setup-body">
+                                    <div class="setup-field">
+                                        <label for="setup-target-input">Target Host / Subnet</label>
+                                        <input type="text" id="setup-target-input" value="Target-Alpha (192.168.42.0/24)" placeholder="e.g. 192.168.1.0/24">
+                                    </div>
+                                    <div class="setup-field-grid">
+                                        <div class="setup-field">
+                                            <label for="setup-in-scope">In-Scope Hosts / Services</label>
+                                            <textarea id="setup-in-scope" placeholder="e.g. *.target.com, port 8080">*.target-alpha.com, target-alpha-server, port 8080, port 5985</textarea>
+                                        </div>
+                                        <div class="setup-field">
+                                            <label for="setup-off-scope">Off-Scope Exclusions</label>
+                                            <textarea id="setup-off-scope" placeholder="e.g. billing.target.com, 192.168.1.50">billing.target-alpha.com, 192.168.42.50</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="setup-field">
+                                        <label for="setup-limitations">Operational Limitations & Safeguards</label>
+                                        <input type="text" id="setup-limitations" value="No Denial of Service payload testing. Execute scans during off-peak hours only. Max speed T3." placeholder="e.g. Business hours only, no exploit research">
+                                    </div>
+                                </div>
+                                <div class="setup-footer">
+                                    <button class="setup-launch-btn" id="setup-run-trigger">Initialize & Deploy Playbook</button>
+                                </div>
+                            </div>
+
+                            <!-- Human Oversight Overlay banner -->
+                            <div class="oversight-banner" id="review-banner">
+                                <div class="oversight-left">
+                                    <svg class="oversight-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                                    <div>
+                                        <div class="oversight-text-title">HUMAN APPROVAL REQUIRED</div>
+                                        <div class="oversight-text-subtitle">Exploit Research agent requests permission to execute payload target-alpha-winrm.py</div>
+                                    </div>
+                                </div>
+                                <div class="oversight-actions">
+                                    <button class="oversight-btn approve-btn" id="oversight-approve-btn">Approve Payload</button>
+                                    <button class="oversight-btn deny-btn" id="oversight-deny-btn">Deny / Terminate</button>
+                                </div>
+                            </div>
+
+                            <!-- Central Octopus orchestrator core -->
+                            <div class="octopus-orchestrator idle" id="octopus-core" title="Orchestrator Core">
+                                <!-- Styled Premium Abstract Octopus Geometry -->
+                                <svg class="octopus-svg" viewBox="0 0 100 100">
+                                    <defs>
+                                        <radialGradient id="octGradient" cx="50%" cy="50%" r="50%">
+                                            <stop offset="0%" stop-color="#334155" />
+                                            <stop offset="85%" stop-color="#0f172a" />
+                                            <stop offset="100%" stop-color="#000000" />
+                                        </radialGradient>
+                                        <filter id="glow">
+                                            <feGaussianBlur stdDeviation="3" result="blur" />
+                                            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                        </filter>
+                                    </defs>
+                                    <!-- Rotating outer dial -->
+                                    <circle class="oct-outer-dial" cx="50%" cy="50%" r="44" fill="none" stroke="rgba(0,0,0,0.15)" stroke-width="1.5" stroke-dasharray="10 5 2 5" />
+                                    <!-- Orbit nodes representing tentacle joints -->
+                                    <g class="oct-joints">
+                                        <circle cx="50" cy="14" r="3.5" fill="#0f172a" />
+                                        <circle cx="75" cy="25" r="3.5" fill="#0f172a" />
+                                        <circle cx="86" cy="50" r="3.5" fill="#0f172a" />
+                                        <circle cx="75" cy="75" r="3.5" fill="#0f172a" />
+                                        <circle cx="50" cy="86" r="3.5" fill="#0f172a" />
+                                        <circle cx="25" cy="75" r="3.5" fill="#0f172a" />
+                                        <circle cx="14" cy="50" r="3.5" fill="#0f172a" />
+                                        <circle cx="25" cy="25" r="3.5" fill="#0f172a" />
+                                    </g>
+                                    <!-- Middle concentric rings -->
+                                    <circle class="oct-mid-ring" cx="50%" cy="50%" r="32" fill="none" stroke="rgba(0,0,0,0.2)" stroke-width="1" />
+                                    <!-- Central body head -->
+                                    <circle class="oct-core-head" cx="50%" cy="50%" r="24" fill="url(#octGradient)" stroke="rgba(0,0,0,0.3)" stroke-width="2" />
+                                    <!-- Pulsing center node (the core intelligence) -->
+                                    <circle class="oct-center-pulse" cx="50%" cy="50%" r="8" fill="#0f172a" />
+                                </svg>
+                            </div>
+
+                            <!-- KRYON Intelligence Core (Shared Memory) -->
+                            <div class="intelligence-core-container" id="intelligence-core">
+                                <div class="core-header">
+                                    <svg class="core-header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"></path></svg>
+                                    <span class="core-title">KRYON INTELLIGENCE CORE</span>
+                                </div>
+                                <div class="core-stats-grid">
+                                    <div class="core-stat-item">
+                                        <span class="core-stat-val" id="core-findings">0</span>
+                                        <span class="core-stat-label">Findings</span>
+                                    </div>
+                                    <div class="core-stat-item">
+                                        <span class="core-stat-val" id="core-domains">0</span>
+                                        <span class="core-stat-label">Domains</span>
+                                    </div>
+                                    <div class="core-stat-item">
+                                        <span class="core-stat-val" id="core-services">0</span>
+                                        <span class="core-stat-label">Services</span>
+                                    </div>
+                                    <div class="core-stat-item">
+                                        <span class="core-stat-val" id="core-paths">0</span>
+                                        <span class="core-stat-label">Attack Paths</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Agent Nodes (Passive Recon to Report Gen) -->
+                            <!-- Node 1 -->
+                            <div class="agent-node-anchor" data-id="1" style="--agent-accent: var(--agent-passive)">
+                                <div class="cube-container" id="cube-container-1">
+                                    <div class="cube">
+                                        <div class="face front">
+                                            <div class="eyes-wrapper">
+                                                <div class="eye left"></div>
+                                                <div class="eye right"></div>
+                                            </div>
+                                        </div>
+                                        <div class="face back"></div>
+                                        <div class="face left"></div>
+                                        <div class="face right"></div>
+                                        <div class="face top"></div>
+                                        <div class="face bottom"></div>
+                                    </div>
+                                </div>
+                                <span class="agent-node-label">Passive Recon</span>
+                            </div>
+
+                            <!-- Node 2 -->
+                            <div class="agent-node-anchor" data-id="2" style="--agent-accent: var(--agent-active)">
+                                <div class="cube-container" id="cube-container-2">
+                                    <div class="cube">
+                                        <div class="face front">
+                                            <div class="eyes-wrapper">
+                                                <div class="eye left"></div>
+                                                <div class="eye right"></div>
+                                            </div>
+                                        </div>
+                                        <div class="face back"></div>
+                                        <div class="face left"></div>
+                                        <div class="face right"></div>
+                                        <div class="face top"></div>
+                                        <div class="face bottom"></div>
+                                    </div>
+                                </div>
+                                <span class="agent-node-label">Active Recon</span>
+                            </div>
+
+                            <!-- Node 3 -->
+                            <div class="agent-node-anchor" data-id="3" style="--agent-accent: var(--agent-hypothesis)">
+                                <div class="cube-container" id="cube-container-3">
+                                    <div class="cube">
+                                        <div class="face front">
+                                            <div class="eyes-wrapper">
+                                                <div class="eye left"></div>
+                                                <div class="eye right"></div>
+                                            </div>
+                                        </div>
+                                        <div class="face back"></div>
+                                        <div class="face left"></div>
+                                        <div class="face right"></div>
+                                        <div class="face top"></div>
+                                        <div class="face bottom"></div>
+                                    </div>
+                                </div>
+                                <span class="agent-node-label">Hypothesis Gen</span>
+                            </div>
+
+                            <!-- Node 4 -->
+                            <div class="agent-node-anchor" data-id="4" style="--agent-accent: var(--agent-exploit)">
+                                <div class="cube-container" id="cube-container-4">
+                                    <div class="cube">
+                                        <div class="face front">
+                                            <div class="eyes-wrapper">
+                                                <div class="eye left"></div>
+                                                <div class="eye right"></div>
+                                            </div>
+                                        </div>
+                                        <div class="face back"></div>
+                                        <div class="face left"></div>
+                                        <div class="face right"></div>
+                                        <div class="face top"></div>
+                                        <div class="face bottom"></div>
+                                    </div>
+                                </div>
+                                <span class="agent-node-label">Exploit Research</span>
+                            </div>
+
+                            <!-- Node 5 -->
+                            <div class="agent-node-anchor" data-id="5" style="--agent-accent: var(--agent-post)">
+                                <div class="cube-container" id="cube-container-5">
+                                    <div class="cube">
+                                        <div class="face front">
+                                            <div class="eyes-wrapper">
+                                                <div class="eye left"></div>
+                                                <div class="eye right"></div>
+                                            </div>
+                                        </div>
+                                        <div class="face back"></div>
+                                        <div class="face left"></div>
+                                        <div class="face right"></div>
+                                        <div class="face top"></div>
+                                        <div class="face bottom"></div>
+                                    </div>
+                                </div>
+                                <span class="agent-node-label">Post-Exploit</span>
+                            </div>
+
+                            <!-- Node 6 -->
+                            <div class="agent-node-anchor" data-id="6" style="--agent-accent: var(--agent-verify)">
+                                <div class="cube-container" id="cube-container-6">
+                                    <div class="cube">
+                                        <div class="face front">
+                                            <div class="eyes-wrapper">
+                                                <div class="eye left"></div>
+                                                <div class="eye right"></div>
+                                            </div>
+                                        </div>
+                                        <div class="face back"></div>
+                                        <div class="face left"></div>
+                                        <div class="face right"></div>
+                                        <div class="face top">
+                                            <div class="verify-orbit-ring"></div>
+                                        </div>
+                                        <div class="face bottom"></div>
+                                    </div>
+                                </div>
+                                <span class="agent-node-label">Verification</span>
+                            </div>
+
+                            <!-- Node 7 -->
+                            <div class="agent-node-anchor" data-id="7" style="--agent-accent: var(--agent-blue)">
+                                <div class="cube-container" id="cube-container-7">
+                                    <div class="cube">
+                                        <div class="face front">
+                                            <div class="eyes-wrapper">
+                                                <div class="eye left"></div>
+                                                <div class="eye right"></div>
+                                            </div>
+                                        </div>
+                                        <div class="face back"></div>
+                                        <div class="face left"></div>
+                                        <div class="face right"></div>
+                                        <div class="face top"></div>
+                                        <div class="face bottom"></div>
+                                    </div>
+                                </div>
+                                <span class="agent-node-label">Blue Teaming</span>
+                            </div>
+
+                            <!-- Node 8 -->
+                            <div class="agent-node-anchor" data-id="8" style="--agent-accent: var(--agent-report)">
+                                <div class="cube-container" id="cube-container-8">
+                                    <div class="cube">
+                                        <div class="face front">
+                                            <div class="eyes-wrapper">
+                                                <div class="eye left"></div>
+                                                <div class="eye right"></div>
+                                            </div>
+                                        </div>
+                                        <div class="face back"></div>
+                                        <div class="face left"></div>
+                                        <div class="face right"></div>
+                                        <div class="face top"></div>
+                                        <div class="face bottom"></div>
+                                    </div>
+                                </div>
+                                <span class="agent-node-label">Report Gen</span>
+                            </div>
+                        </div>
+
+                        <!-- Pipeline Progress Bar footer -->
+                        <div class="pipeline-progress-bar">
+                            <span class="pipeline-step" id="step-lbl-1">RECON</span>
+                            <span class="pipeline-arrow">&rarr;</span>
+                            <span class="pipeline-step" id="step-lbl-2">HYPOTHESIS</span>
+                            <span class="pipeline-arrow">&rarr;</span>
+                            <span class="pipeline-step" id="step-lbl-3">EXPLOIT</span>
+                            <span class="pipeline-arrow">&rarr;</span>
+                            <span class="pipeline-step" id="step-lbl-4">POST-EXPLOIT</span>
+                            <span class="pipeline-arrow">&rarr;</span>
+                            <span class="pipeline-step" id="step-lbl-5">VERIFY</span>
+                            <span class="pipeline-arrow">&rarr;</span>
+                            <span class="pipeline-step" id="step-lbl-6">BLUE TEAM</span>
+                            <span class="pipeline-arrow">&rarr;</span>
+                            <span class="pipeline-step" id="step-lbl-7">REPORT</span>
+                        </div>
+                    </div>
+
+                    <!-- Draggable Resizer handle -->
+                    <div class="divider" id="panel-resizer"></div>
+
+                    <!-- Right: Selected Agent Details Panel -->
+                    <div class="puppeteer-right-panel" id="orchestrator-split-right">
+
+                        <!-- Split Panel: Default View (Mission Control) -->
+                        <div class="mission-control-view" id="mission-control-panel">
+                            <div class="right-panel-header">
+                                <h3 class="panel-title">KRYON Mission Control</h3>
+                                <p class="panel-subtitle">Command autonomous security agents through KRYON's orchestration layer.</p>
+                            </div>
+
+                            <div class="right-panel-body">
+                                <div class="stats-card-grid">
+                                    <div class="stat-card full-width">
+                                        <span class="stat-card-val" id="mc-progress-pct">0%</span>
+                                        <span class="stat-card-label">PLAYBOOK OPERATION PROGRESS</span>
+                                        <div class="stat-progress-bar">
+                                            <div class="stat-progress-fill" id="mc-progress-bar"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <span class="stat-card-val" id="mc-active-count">0</span>
+                                        <span class="stat-card-label">ACTIVE WORKERS</span>
+                                    </div>
+                                    <div class="stat-card">
+                                        <span class="stat-card-val" id="mc-findings-count">0</span>
+                                        <span class="stat-card-label">FINDINGS RECORDED</span>
+                                    </div>
+                                </div>
+
+                                <div class="operation-log-container">
+                                    <h4 class="context-section-title" style="margin-bottom: 12px;">Active Playbook Log</h4>
+                                    <div class="log-list" id="mc-log-feed">
+                                        <div class="log-entry">
+                                            <span class="log-time">[00:00:00]</span>
+                                            <span class="log-source" style="--agent-accent: var(--text-accent)">ORCHESTRATOR</span>
+                                            <span class="log-msg">Operational system initialized. Standing by. Setup playbook config to launch.</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="mc-active-profile-section">
+                                    <h4 class="context-section-title" style="margin-bottom: 12px;">Active Target Profile</h4>
+                                    <div class="citation-card">
+                                        <span class="citation-source">HUMAN OVERSIGHT: ACTIVE</span>
+                                        <span class="citation-title" id="mc-profile-target-title">Target: None Configured</span>
+                                        <p class="citation-snippet" id="mc-profile-in-scope">In-Scope: Awaiting setup parameters...</p>
+                                        <p class="citation-snippet" id="mc-profile-off-scope" style="margin-top:4px;">Excludes: Awaiting setup parameters...</p>
+                                        <p class="citation-snippet" id="mc-profile-limitations" style="margin-top:4px;">Safeguards: Awaiting setup parameters...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Split Panel: Agent Detail View (Visible when node clicked) -->
+                        <div class="agent-detail-view" id="agent-detail-panel">
+                            <div class="agent-identity-card" id="detail-identity-header">
+                                <div class="identity-cube-wrap">
+                                    <div class="cube-container" style="width: 32px; height: 32px; perspective: 150px;">
+                                        <div class="cube" id="detail-mini-cube">
+                                            <div class="face front"></div>
+                                            <div class="face back"></div>
+                                            <div class="face left"></div>
+                                            <div class="face right"></div>
+                                            <div class="face top"></div>
+                                            <div class="face bottom"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="identity-desc">
+                                    <span class="identity-name" id="detail-agent-name">Active Recon</span>
+                                    <span class="identity-persona" id="detail-agent-persona">Energetic and alert. Fast pulsing scans.</span>
+                                    <div class="identity-status-badge" id="detail-agent-badge">
+                                        <span id="detail-agent-status">Idle</span>
+                                    </div>
+                                </div>
+                                <button class="opp-btn" id="close-detail-btn" style="margin-left: auto;">
+                                    Close Panel
+                                </button>
+                            </div>
+
+                            <div class="right-panel-body">
+                                <div>
+                                    <h4 class="context-section-title" style="margin-bottom: 12px;">REASONING SUMMARY</h4>
+                                    <div class="reasoning-grid">
+                                        <div class="reasoning-item span-2">
+                                            <span class="reasoning-label">OBJECTIVE</span>
+                                            <div class="reasoning-val" id="reasoning-objective">Map external targets and banners.</div>
+                                        </div>
+                                        <div class="reasoning-item">
+                                            <span class="reasoning-label">CURRENT SUB-GOAL</span>
+                                            <div class="reasoning-val" id="reasoning-subgoal">Enumerate target assets.</div>
+                                        </div>
+                                        <div class="reasoning-item">
+                                            <span class="reasoning-label">EVIDENCE CONSIDERED</span>
+                                            <div class="reasoning-val" id="reasoning-evidence">No active scans started.</div>
+                                        </div>
+                                        <div class="reasoning-item">
+                                            <span class="reasoning-label">DECISION</span>
+                                            <div class="reasoning-val" id="reasoning-decision">Awaiting playbook activation.</div>
+                                        </div>
+                                        <div class="reasoning-item">
+                                            <span class="reasoning-label">NEXT ACTION</span>
+                                            <div class="reasoning-val" id="reasoning-action">Trigger subroutines.</div>
+                                        </div>
+                                        <div class="reasoning-item">
+                                            <span class="reasoning-label">CONFIDENCE</span>
+                                            <div class="confidence-gauge-container">
+                                                <div class="confidence-dial">
+                                                    <svg class="confidence-svg" viewBox="0 0 44 44" width="44" height="44">
+                                                        <circle class="confidence-circle-bg" cx="22" cy="22" r="20"></circle>
+                                                        <circle class="confidence-circle-fill" id="confidence-circle-fill" cx="22" cy="22" r="20"></circle>
+                                                    </svg>
+                                                    <span class="confidence-text" id="confidence-text">0%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tool Node Graph -->
+                                <div class="tool-graph-container">
+                                    <div class="tool-graph-header" style="display:flex; justify-content:space-between; align-items:center;">
+                                        <h4 class="context-section-title" style="margin-bottom:0;">Capabilities Map</h4>
+                                        <span class="opp-meta-label" id="detail-tool-count">0 Tools Available</span>
+                                    </div>
+
+                                    <div class="tool-graph-viewport">
+                                        <svg class="tool-svg-canvas" id="tool-svg-canvas">
+                                            <!-- SVG Node paths mapped by index.js -->
+                                        </svg>
+                                        <div id="tool-node-container"></div>
+                                    </div>
+
+                                    <!-- Tool Details Stats -->
+                                    <div class="tool-details-grid">
+                                        <div class="tool-detail-item">
+                                            <span class="tool-detail-label">Active Tool</span>
+                                            <span class="tool-detail-val" id="active-tool-name">-</span>
+                                        </div>
+                                        <div class="tool-detail-item">
+                                            <span class="tool-detail-label">Status</span>
+                                            <span class="tool-detail-val" id="active-tool-status">STANDBY</span>
+                                        </div>
+                                        <div class="tool-detail-item">
+                                            <span class="tool-detail-label">Result Code</span>
+                                            <span class="tool-detail-val" id="active-tool-result">-</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Premium Report presentation overlay (Card) -->
+        <div class="report-overlay" id="report-modal">
+            <div class="report-card">
+                <div class="report-header">
+                    <div class="report-header-left">
+                        <svg class="report-header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        <span class="report-header-title">Audit Report — KRYON Autonomous Run</span>
+                    </div>
+                    <button class="close-report-btn" id="close-report-modal-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                </div>
+
+                <div class="report-body">
+                    <div class="report-stats-strip">
+                        <div class="report-stat-col">
+                            <span class="report-stat-num text-primary" id="rep-total">127</span>
+                            <span class="report-stat-lbl">Findings</span>
+                        </div>
+                        <div class="report-stat-col">
+                            <span class="report-stat-num verified" id="rep-verified">6</span>
+                            <span class="report-stat-lbl">Verified</span>
+                        </div>
+                        <div class="report-stat-col">
+                            <span class="report-stat-num critical" id="rep-critical">4</span>
+                            <span class="report-stat-lbl">Critical</span>
+                        </div>
+                        <div class="report-stat-col">
+                            <span class="report-stat-num high" id="rep-recommend">3</span>
+                            <span class="report-stat-lbl">Remediations</span>
+                        </div>
+                    </div>
+
+                    <div class="report-section">
+                        <span class="report-section-title">EXECUTIVE SUMMARY</span>
+                        <p>KRYON coordinated 8 autonomous agent workers in an External Security Assessment playbook against target domain <strong id="rep-target-txt">Target-Alpha</strong>.</p>
+                        <p>The playbook completed in **04:32** with high operational confidence (96%). A total of 127 data points were consolidated inside the shared Intelligence Core. Active analysis exposed a high-severity entry point via exposed web application endpoints on port 8080. Exploit payloads were successfully verified under strict human oversight safeguards.</p>
+                    </div>
+
+                    <div class="report-section">
+                        <span class="report-section-title">CRITICAL FINDINGS</span>
+                        <div class="citation-card" style="margin-bottom:8px;">
+                            <span class="citation-source" style="color:var(--color-error)">KRYON-CRIT-01 // verified</span>
+                            <span class="citation-title">Remote Code Execution via WinRM Port 5985</span>
+                            <p class="citation-snippet">System configured with default credentials. Verification agent generated verified system terminal callbacks and extracted safe metadata payloads.</p>
+                        </div>
+                        <div class="citation-card">
+                            <span class="citation-source" style="color:var(--color-error)">KRYON-CRIT-02 // verified</span>
+                            <span class="citation-title">Exposed Config Backups on port 8080</span>
+                            <p class="citation-snippet">Apache web server directories contained unencrypted config files mapping database and LDAP master hashes.</p>
+                        </div>
+                    </div>
+
+                    <div class="report-section">
+                        <span class="report-section-title">RECOMMENDED DEFENSES (Sigma Rules Generated)</span>
+                        <p>1. Restrict external access to TCP Port 5985 (WinRM) using firewalls.</p>
+                        <p>2. Deploy the generated YARA rule **KRYON_EXPLOIT_VERIFY_WINRM** across endpoints.</p>
+                        <p>3. Restrict Directory Listing configuration on target port 8080 web containers.</p>
+                    </div>
+                </div>
+
+                <div class="report-footer">
+                    <button class="report-action-btn" id="rep-export-pdf">Export PDF</button>
+                    <button class="report-action-btn" id="rep-export-json">Export JSON</button>
+                    <button class="report-action-btn primary" id="rep-export-yara">Export YARA Rule</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="index.js"></script>
+</body>
+</html>
