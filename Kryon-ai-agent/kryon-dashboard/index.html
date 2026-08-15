@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kryon Dashboard</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter and JetBrains Mono -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Marked Markdown Parser via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  
+  <style>
+    :root {
+      --bg: #fafaf7;
+      --bg-2: #f5f4ef;
+      --panel: #ffffff;
+      --sidebar: #ffffff;
+      --border: #e5e5e0;
+      --border-2: #d4d4cc;
+      --text: #1a1a1a;
+      --text-2: #4b5563;
+      --muted: #9ca3af;
+      --orange: #ff6b35;
+      --orange-2: #f97316;
+      --orange-light: #fff1ea;
+      --green: #10b981;
+      --red: #ef4444;
+      --yellow: #f59e0b;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+    }
+
+    .nav-active {
+      color: var(--orange) !important;
+      border-left: 3px solid var(--orange);
+      background-color: var(--orange-light);
+    }
+
+    /* Mascot Animations */
+    @keyframes popOut {
+      0% {
+        transform: translateY(180px) scale(0.5);
+        opacity: 0;
+      }
+      70% {
+        transform: translateY(-20px) scale(1.05);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes breathe {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.04);
+      }
+    }
+
+    .mascot-pop-out {
+      animation: popOut 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    .mascot-breathing {
+      animation: breathe 3s ease-in-out infinite;
+    }
+
+    /* Heartbeat Path Animation */
+    @keyframes pulseWave {
+      0% {
+        stroke-dashoffset: 600;
+      }
+      100% {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    .heartbeat-path {
+      stroke-dasharray: 600;
+      stroke-dashoffset: 600;
+      animation: pulseWave 6s linear infinite;
+    }
+
+    /* Radar Animation */
+    @keyframes rotateRadar {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes blinkDot {
+      0% { opacity: 0.2; }
+      100% { opacity: 1; }
+    }
+
+    .radar-line {
+      transform-origin: 50px 50px;
+      animation: rotateRadar 4s linear infinite;
+    }
+
+    .radar-dot {
+      animation: blinkDot 1s infinite alternate;
+    }
+
+    /* Eye Blink Animation */
+    @keyframes blink {
+      0%, 90%, 100% {
+        transform: scaleY(1);
+      }
+      95% {
+        transform: scaleY(0.1);
+      }
+    }
+
+    .eye {
+      animation: blink 4s infinite;
+    }
+
+    /* 3D Cube styles */
+    .cube-inner {
+      transform-style: preserve-3d;
+      transition: transform 0.5s;
+    }
+
+    .cube-container:hover .cube-inner {
+      transform: rotateY(15deg) rotateX(10deg);
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-2);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--muted);
+    }
+  </style>
+</head>
+<body class="flex h-screen overflow-hidden select-none">
+
+  <!-- Sidebar -->
+  <aside class="w-60 bg-white border-r border-[#e5e5e0] flex flex-col justify-between h-full z-20 shrink-0 shadow-sm">
+    <div>
+      <!-- Logo Header -->
+      <div class="p-6 flex items-center gap-2.5 border-b border-[#e5e5e0]">
+        <!-- Hexagon Logo -->
+        <svg viewBox="0 0 100 100" class="w-7 h-7 text-[#ff6b35] fill-none stroke-current" stroke-width="8" stroke-linejoin="round">
+          <polygon points="50,5 93,30 93,80 50,95 7,80 7,30"/>
+          <polygon points="50,22 75,37 75,63 50,78 25,63 25,37" fill="#fff1ea"/>
+        </svg>
+        <span class="font-bold tracking-wide text-lg text-gray-800">KRYON</span>
+        <span class="text-xs text-gray-400 mt-1">⌄</span>
+      </div>
+      
+      <!-- Nav Menu -->
+      <nav class="mt-6 px-4 space-y-1.5">
+        <button onclick="switchTab('chat')" id="nav-chat" class="w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-[#fff1ea] hover:text-[#ff6b35] transition-all font-medium nav-active">
+          Chat
+        </button>
+        <button onclick="switchTab('testing')" id="nav-testing" class="w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-[#fff1ea] hover:text-[#ff6b35] transition-all font-medium">
+          Testing Mode
+        </button>
+        <button onclick="switchTab('settings')" id="nav-settings" class="w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-[#fff1ea] hover:text-[#ff6b35] transition-all font-medium">
+          Settings
+        </button>
+      </nav>
+    </div>
+
+    <!-- User Badge -->
+    <div class="p-4 border-t border-[#e5e5e0]">
+      <div class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-xl cursor-pointer transition-all border border-transparent hover:border-[#e5e5e0]">
+        <div class="w-8 h-8 bg-orange-100 text-[#ff6b35] rounded-full flex items-center justify-center font-bold text-sm">KU</div>
+        <div class="text-left">
+          <div class="font-semibold text-gray-800 text-xs">KRYON User</div>
+          <div class="text-gray-500 text-[10px] flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span> Online
+          </div>
+        </div>
+        <span class="ml-auto text-gray-400 text-xs">⌄</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Container -->
+  <main class="flex-1 overflow-y-auto relative min-h-screen">
+    
+    <!-- Top Decorative Pattern -->
+    <div class="absolute top-0 left-0 w-full h-48 pointer-events-none opacity-[0.25] select-none bg-[radial-gradient(#ff6b35_1px,transparent_1px)] [background-size:16px_16px] z-0"></div>
+    <div class="absolute top-8 right-16 w-32 h-16 pointer-events-none opacity-20 text-[#ff6b35] z-0 hidden lg:block">
+      <svg viewBox="0 0 100 50" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="3 3">
+        <line x1="10" y1="10" x2="90" y2="10"/>
+        <line x1="90" y1="10" x2="90" y2="40"/>
+        <circle cx="10" cy="10" r="3" fill="currentColor"/>
+        <circle cx="90" cy="40" r="3" fill="currentColor"/>
+      </svg>
+    </div>
+
+    <!-- PAGE 1: CHAT TAB -->
+    <div id="tab-chat" class="tab-content block p-6 max-w-4xl mx-auto z-10 relative space-y-8">
+      
+      <!-- Mascot Welcome Image Area -->
+      <div class="flex flex-col items-center justify-center pt-8 relative overflow-visible">
+        <div id="mascot-img-container" class="z-10 flex flex-col items-center w-36 h-36 mascot-pop-out">
+          <img src="kryon-mascot.jpg" alt="Kryon Mascot" class="w-32 h-32 object-contain mascot-breathing drop-shadow-md" id="mascot-img">
+        </div>
+      </div>
+
+      <!-- Welcome Heading -->
+      <div class="text-center py-2 space-y-1">
+        <div class="text-xs font-bold text-[#ff6b35] tracking-[0.25em] uppercase">Welcome To</div>
+        <h1 class="text-4xl font-extrabold tracking-tight text-gray-800">KRYON</h1>
+        <p class="text-gray-500 text-sm max-w-md mx-auto">Your AI Operations Command Center</p>
+        <div class="pt-2">
+          <span class="text-[10px] font-mono text-[#ff6b35] bg-[#fff1ea] px-2.5 py-1 rounded-full border border-orange-200 inline-block">
+            🤖 October Mode Active
+          </span>
+        </div>
+      </div>
+
+      <!-- Chat Input Area -->
+      <div class="max-w-2xl mx-auto space-y-4">
+        
+        <!-- Search bar/input -->
+        <form onsubmit="handleSendChat(event)" class="bg-[#1a1a1a] rounded-full p-2.5 flex items-center shadow-lg border border-gray-800 transition-all focus-within:ring-2 focus-within:ring-[#ff6b35]">
+          <button type="button" class="w-9 h-9 rounded-full bg-gray-800 text-gray-300 hover:text-white flex items-center justify-center font-bold text-lg hover:bg-gray-700 transition-all shrink-0">
+            +
+          </button>
+          
+          <input type="text" id="chat-input" placeholder="Ask KRYON anything..." autocomplete="off" class="flex-1 bg-transparent text-white px-4 py-2 outline-none text-sm placeholder-gray-500 font-medium">
+          
+          <!-- Actions group -->
+          <div class="flex items-center gap-2 px-2 shrink-0">
+            <button type="button" title="Microphone" class="w-8 h-8 rounded-full text-gray-400 hover:text-white hover:bg-gray-800 flex items-center justify-center text-sm transition-all">
+              🎤
+            </button>
+            <button type="button" title="Profile" class="w-8 h-8 rounded-full text-gray-400 hover:text-white hover:bg-gray-800 flex items-center justify-center text-sm font-semibold transition-all">
+              Ⓟ
+            </button>
+            <button type="button" title="Upload" class="w-8 h-8 rounded-full text-gray-400 hover:text-white hover:bg-gray-800 flex items-center justify-center text-sm transition-all">
+              ⬆️
+            </button>
+            <button type="button" title="Bookmark" class="w-8 h-8 rounded-full text-gray-400 hover:text-white hover:bg-gray-800 flex items-center justify-center text-sm transition-all">
+              🔖
+            </button>
+            <button type="button" title="Audio waveform" class="w-8 h-8 rounded-full text-gray-400 hover:text-white hover:bg-gray-800 flex items-center justify-center text-sm transition-all">
+              📊
+            </button>
+          </div>
+          
+          <button type="submit" class="w-9 h-9 rounded-full bg-[#ff6b35] hover:bg-[#f97316] text-white flex items-center justify-center transition-all shrink-0 font-bold">
+            ➔
+          </button>
+        </form>
+
+        <!-- Inline error message container -->
+        <div id="chat-error-msg" class="text-xs text-center text-red-500 font-medium hidden"></div>
+
+        <!-- Chat dialog feed -->
+        <div id="chat-dialog-feed" class="space-y-4 max-h-[380px] overflow-y-auto p-2 scroll-smooth">
+          <!-- Chat bubbles will render here -->
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- PAGE 2: TESTING MODE TAB -->
+    <div id="tab-testing" class="tab-content hidden p-6 max-w-5xl mx-auto z-10 relative space-y-6">
+      <div class="space-y-1">
+        <h2 class="text-2xl font-extrabold tracking-tight text-gray-800">AI Testing Mode</h2>
+        <p class="text-gray-500 text-sm">8 specialized agents working together in coordination</p>
+      </div>
+
+      <!-- Target & Authorization Form -->
+      <div class="bg-white border border-[#e5e5e0] rounded-2xl p-5 shadow-sm space-y-3">
+        <div class="text-xs font-bold text-[#ff6b35] tracking-wider uppercase">Testing Scope & Authorization</div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="space-y-1">
+            <label class="block text-[10px] font-bold text-gray-500 uppercase">Target (Domain / IP)</label>
+            <input type="text" id="testing-target" placeholder="e.g. 192.168.1.10" class="w-full px-3 py-2 border border-[#e5e5e0] rounded-xl outline-none focus:border-[#ff6b35] text-xs font-mono">
+          </div>
+          <div class="space-y-1">
+            <label class="block text-[10px] font-bold text-gray-500 uppercase">In-Scope Ranges / Ports</label>
+            <input type="text" id="testing-scope" placeholder="e.g. ports 80, 443, 8080" class="w-full px-3 py-2 border border-[#e5e5e0] rounded-xl outline-none focus:border-[#ff6b35] text-xs font-mono">
+          </div>
+          <div class="space-y-1">
+            <label class="block text-[10px] font-bold text-gray-500 uppercase">Permission Letter / Authorization</label>
+            <textarea id="testing-permission" placeholder="Type or paste authorization text here..." class="w-full px-3 py-1.5 border border-[#e5e5e0] rounded-xl outline-none focus:border-[#ff6b35] text-xs font-mono h-[34px] resize-none"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Play area -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Interactive Canvas Playground -->
+        <div class="lg:col-span-2 bg-white border border-[#e5e5e0] rounded-2xl p-6 shadow-sm overflow-hidden flex items-center justify-center relative min-h-[460px] h-[480px]" id="testing-playground">
+          
+          <!-- SVG canvas overlay for tentacles -->
+          <svg class="absolute inset-0 w-full h-full pointer-events-none z-0" id="tentacles-svg"></svg>
+
+          <!-- Central Octopus Node -->
+          <div id="octopus-head" class="absolute w-24 h-24 bg-[#fff1ea] border-4 border-[#ff6b35] rounded-full flex items-center justify-center shadow-lg z-10 transition-all duration-300 hover:scale-105 select-none cursor-pointer">
+            <img src="kryon-mascot.jpg" alt="Kryon Center" class="w-20 h-20 object-contain drop-shadow-sm">
+          </div>
+
+        </div>
+
+        <!-- Terminal Logs Console -->
+        <div class="bg-[#1a1a1a] rounded-2xl p-5 shadow-md flex flex-col justify-between h-[480px] border border-gray-800">
+          <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+            <span class="text-gray-400 font-mono text-xs uppercase tracking-wider font-semibold">Live Testing Logs</span>
+            <div class="flex gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+            </div>
+          </div>
+
+          <!-- Console Text area -->
+          <div id="test-console-logs" class="flex-1 overflow-y-auto font-mono text-xs text-gray-300 py-3 space-y-2 scroll-smooth select-text">
+            <div class="text-gray-500 font-semibold">[SYSTEM] Ready. Click 'Start test run' to launch simulation.</div>
+          </div>
+
+          <div class="pt-3 border-t border-gray-800 mt-2">
+            <button onclick="startTestRun()" id="start-test-btn" class="w-full bg-[#ff6b35] hover:bg-[#f97316] text-white py-2.5 rounded-xl font-bold transition-all shadow-md active:scale-95 flex items-center justify-center gap-2">
+              ▶ Start test run
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- PAGE 3: SETTINGS TAB -->
+    <div id="tab-settings" class="tab-content hidden p-6 max-w-3xl mx-auto z-10 relative space-y-6">
+      <div class="space-y-1">
+        <h2 class="text-2xl font-extrabold tracking-tight text-gray-800">Settings</h2>
+        <p class="text-gray-500 text-sm">Configure app credentials, API keys, and animations</p>
+      </div>
+
+      <div class="bg-white border border-[#e5e5e0] rounded-2xl p-6 shadow-sm space-y-6">
+        
+        <!-- Section 1: API Keys & Model -->
+        <div class="space-y-4">
+          <h3 class="font-bold text-gray-800 text-sm tracking-wide border-b border-gray-100 pb-2">API CREDENTIALS</h3>
+          <div class="space-y-3">
+            <div class="space-y-2">
+              <label class="block text-xs font-bold text-gray-500 tracking-wider">OPENROUTER API KEY</label>
+              <div class="flex gap-2">
+                <div class="relative flex-1">
+                  <input type="password" id="gemini-key-input" placeholder="sk-or-v1-..." class="w-full px-4 py-2.5 border border-[#e5e5e0] rounded-xl outline-none focus:border-[#ff6b35] text-sm font-mono tracking-widest bg-gray-50">
+                  <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs font-semibold hover:text-[#ff6b35]">
+                    SHOW
+                  </button>
+                </div>
+                <button onclick="testGeminiConnection()" id="test-conn-btn" class="bg-gray-100 hover:bg-gray-200 border border-[#e5e5e0] text-gray-700 px-4 py-2 rounded-xl font-semibold text-xs tracking-wider transition-all shrink-0">
+                  TEST CONNECTION
+                </button>
+                <button onclick="listAvailableModels()" id="list-models-btn" class="bg-gray-100 hover:bg-gray-200 border border-[#e5e5e0] text-gray-700 px-4 py-2 rounded-xl font-semibold text-xs tracking-wider transition-all shrink-0">
+                  LIST MODELS
+                </button>
+              </div>
+              <p class="text-[10px] text-gray-400 leading-normal">
+                Get your personal API key at <a href="https://openrouter.ai/keys" target="_blank" class="text-[#ff6b35] hover:underline font-semibold">OpenRouter Keys</a>. Key is stored locally in your browser.
+              </p>
+            </div>
+            
+            <div class="space-y-2">
+              <label class="block text-xs font-bold text-gray-500 tracking-wider">OPENROUTER MODEL</label>
+              <select id="gemini-model-select" class="w-full px-4 py-2.5 border border-[#e5e5e0] rounded-xl outline-none focus:border-[#ff6b35] text-sm bg-gray-50 text-gray-700 font-medium">
+                <option value="dots-studio/dots-3-note-preview:free" selected>dots-studio/dots-3-note-preview:free (Free MoE)</option>
+                <option value="google/gemini-2.5-flash">google/gemini-2.5-flash</option>
+                <option value="google/gemini-1.5-flash">google/gemini-1.5-flash</option>
+                <option value="meta-llama/llama-3.3-70b-instruct:free">meta-llama/llama-3.3-70b-instruct:free</option>
+                <option value="deepseek/deepseek-chat">deepseek/deepseek-chat</option>
+              </select>
+            </div>
+            
+            <!-- Test connection status message -->
+            <div id="test-connection-status" class="text-xs font-semibold mt-1 hidden"></div>
+            <!-- Available models list display -->
+            <div id="available-models-list" class="text-xs bg-gray-50 border border-[#e5e5e0] rounded-xl p-3 max-h-48 overflow-y-auto hidden mt-2 text-gray-600 font-mono"></div>
+          </div>
+        </div>
+
+        <!-- Section 2: Display & Mascot Config -->
+        <div class="space-y-4">
+          <h3 class="font-bold text-gray-800 text-sm tracking-wide border-b border-gray-100 pb-2">PREFERENCES</h3>
+          
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-xs font-bold text-gray-700">Mascot Animations</div>
+              <div class="text-[10px] text-gray-400 mt-0.5">Toggle the floating/breathing mascot motion on the home page</div>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="mascot-anim-toggle" checked onchange="toggleMascotAnimations()" class="sr-only peer">
+              <div class="w-9 h-5 bg-gray-200 rounded-full peer peer-focus:ring-2 peer-focus:ring-[#fff1ea] peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#ff6b35]"></div>
+            </label>
+          </div>
+
+          <div class="flex items-center justify-between pt-2 border-t border-gray-50">
+            <div>
+              <div class="text-xs font-bold text-gray-700">Theme Select</div>
+              <div class="text-[10px] text-gray-400 mt-0.5">Light theme with orange accents is hardlocked for this personal demo</div>
+            </div>
+            <span class="text-xs font-semibold text-gray-400 bg-gray-100 px-2.5 py-1 rounded border border-gray-200">Light Active</span>
+          </div>
+        </div>
+
+        <!-- Section 3: About -->
+        <div class="space-y-4 pt-2">
+          <h3 class="font-bold text-gray-800 text-sm tracking-wide border-b border-gray-100 pb-2">ABOUT DASHBOARD</h3>
+          <div class="grid grid-cols-2 gap-4 text-xs">
+            <div>
+              <span class="text-gray-400">Version:</span>
+              <span class="font-mono font-semibold text-gray-700 ml-1">0.1.0</span>
+            </div>
+            <div>
+              <span class="text-gray-400">License:</span>
+              <span class="font-semibold text-gray-700 ml-1">MIT</span>
+            </div>
+            <div class="col-span-2">
+              <span class="text-gray-400">Author:</span>
+              <span class="font-semibold text-gray-700 ml-1">KRYON Operations Team</span>
+            </div>
+          </div>
+          <p class="text-[10px] text-gray-400 pt-2">
+            Built with ❤️ as a standalone demo dashboard for visualizing multi-agent operational models.
+          </p>
+        </div>
+
+        <!-- Actions -->
+        <div class="pt-4 border-t border-gray-100 flex justify-end gap-3">
+          <button onclick="saveSettings()" class="bg-[#ff6b35] hover:bg-[#f97316] text-white px-6 py-2.5 rounded-xl font-bold text-xs tracking-wider transition-all shadow-md active:scale-95">
+            SAVE SETTINGS
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // System Config
+    const agentsData = [
+      { id: 'recon-passive', label: 'recon-passive', role: 'Passive Scanner', bgClass: 'bg-cyan-500 border-cyan-600 text-white' },
+      { id: 'recon-active', label: 'recon-active', role: 'Active Probe', bgClass: 'bg-blue-500 border-blue-600 text-white' },
+      { id: 'analysis-hypothesis', label: 'analysis-hypothesis', role: 'Analyzer', bgClass: 'bg-indigo-500 border-indigo-600 text-white' },
+      { id: 'exploit', label: 'exploit', role: 'Exploiter', bgClass: 'bg-red-500 border-red-600 text-white' },
+      { id: 'post-exploit', label: 'post-exploit', role: 'Post-Exploit', bgClass: 'bg-pink-500 border-pink-600 text-white' },
+      { id: 'verify', label: 'verify', role: 'Verifier', bgClass: 'bg-emerald-500 border-emerald-600 text-white' },
+      { id: 'blue-team', label: 'blue-team', role: 'Blue Defender', bgClass: 'bg-amber-500 border-amber-600 text-white' },
+      { id: 'report', label: 'report', role: 'Reporter', bgClass: 'bg-teal-500 border-teal-600 text-white' }
+    ];
+
+    // Initialization on Page Load
+    document.addEventListener('DOMContentLoaded', () => {
+      // Load saved API key
+      const savedKey = localStorage.getItem('kryon.gemini.api_key') || 'AQ.Ab8RN6J1h4jAoo0Zl7H0uY-YUD0Lb3l43hgH7bgvOzBDdaw-Yw';
+      document.getElementById('gemini-key-input').value = savedKey;
+      if (!localStorage.getItem('kryon.gemini.api_key')) {
+        localStorage.setItem('kryon.gemini.api_key', savedKey);
+      }
+      const savedModel = localStorage.getItem('kryon.gemini.model') || 'dots-studio/dots-3-note-preview:free';
+      document.getElementById('gemini-model-select').value = savedModel;
+      if (!localStorage.getItem('kryon.gemini.model')) {
+        localStorage.setItem('kryon.gemini.model', savedModel);
+      }
+
+      // Load preferences
+      const savedAnim = localStorage.getItem('kryon.mascot.animations');
+      if (savedAnim === 'false') {
+        document.getElementById('mascot-anim-toggle').checked = false;
+        toggleMascotAnimations();
+      }
+
+      // Initialize Testing Playground Layout
+      initPlayground();
+      window.addEventListener('resize', initPlayground);
+
+      // Trigger pop-out animation end handler to chain breathing
+      const mascot = document.getElementById('mascot-img-container');
+      mascot.addEventListener('animationend', (e) => {
+        if (e.animationName === 'popOut') {
+          mascot.classList.remove('mascot-pop-out');
+          mascot.style.transform = 'translateY(0) scale(1)';
+          mascot.style.opacity = '1';
+          const img = document.getElementById('mascot-img');
+          const toggle = document.getElementById('mascot-anim-toggle');
+          if (toggle.checked) {
+            img.classList.add('mascot-breathing');
+          }
+        }
+      });
+
+      // Clear typing indicator on start
+      clearChatInputError();
+    });
+
+    // SPA Router switchTab
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.getElementById('tab-' + tabId).classList.remove('hidden');
+      
+      document.querySelectorAll('nav button').forEach(btn => {
+        btn.classList.remove('nav-active');
+      });
+      document.getElementById('nav-' + tabId).classList.add('nav-active');
+
+      // Re-initialize playground coordinates if switching to Testing
+      if (tabId === 'testing') {
+        setTimeout(initPlayground, 50);
+      }
+    }
+
+    // Toggle password visibility on key field
+    function togglePasswordVisibility() {
+      const field = document.getElementById('gemini-key-input');
+      const btn = field.nextElementSibling;
+      if (field.type === 'password') {
+        field.type = 'text';
+        btn.innerText = 'HIDE';
+      } else {
+        field.type = 'password';
+        btn.innerText = 'SHOW';
+      }
+    }
+
+    // Mascot animations preference handler
+    function toggleMascotAnimations() {
+      const toggle = document.getElementById('mascot-anim-toggle');
+      const img = document.getElementById('mascot-img');
+      if (toggle.checked) {
+        img.classList.add('mascot-breathing');
+        img.style.animationPlayState = 'running';
+      } else {
+        img.classList.remove('mascot-breathing');
+        img.style.animationPlayState = 'paused';
+      }
+    }
+
+    // Save settings handler
+    function saveSettings() {
+      const keyVal = document.getElementById('gemini-key-input').value.trim();
+      const animVal = document.getElementById('mascot-anim-toggle').checked;
+      const modelVal = document.getElementById('gemini-model-select').value;
+      
+      localStorage.setItem('kryon.gemini.api_key', keyVal);
+      localStorage.setItem('kryon.mascot.animations', animVal);
+      localStorage.setItem('kryon.gemini.model', modelVal);
+
+      // Trigger status alert
+      const statusDiv = document.getElementById('test-connection-status');
+      statusDiv.className = 'text-xs font-semibold mt-1 text-[#10b981] block';
+      statusDiv.innerText = '✅ Settings saved successfully.';
+      
+      setTimeout(() => {
+        statusDiv.classList.add('hidden');
+      }, 3000);
+    }
+
+    // Clear chat input error indicator
+    function clearChatInputError() {
+      const err = document.getElementById('chat-error-msg');
+      err.innerText = '';
+      err.classList.add('hidden');
+    }
+
+    // Render Chat Bubble Helper
+    function appendChatBubble(role, content) {
+      const feed = document.getElementById('chat-dialog-feed');
+      const bubble = document.createElement('div');
+      
+      if (role === 'user') {
+        bubble.className = 'flex justify-end';
+        bubble.innerHTML = `
+          <div class="bg-[#fff1ea] border border-orange-200 text-[#ff6b35] font-medium text-sm rounded-2xl rounded-tr-none px-4 py-3 max-w-[80%] shadow-sm">
+            ${escapeHtml(content)}
+          </div>
+        `;
+      } else {
+        bubble.className = 'flex gap-3 justify-start items-start';
+        // Parse markdown content using marked.js
+        const html = marked.parse(content);
+        bubble.innerHTML = `
+          <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center border border-orange-200 text-sm shrink-0 shadow-sm">🐙</div>
+          <div class="flex-1 bg-white border border-[#e5e5e0] text-[#1a1a1a] text-sm rounded-2xl rounded-tl-none px-4 py-3 shadow-sm select-text prose prose-sm max-w-[85%]">
+            <div class="font-bold text-[10px] text-[#ff6b35] tracking-wider uppercase mb-1">KRYON</div>
+            <div class="leading-relaxed whitespace-pre-wrap">${html}</div>
+          </div>
+        `;
+      }
+      
+      feed.appendChild(bubble);
+      feed.scrollTop = feed.scrollHeight;
+    }
+
+    // Typing loading indicator bubble helper
+    function showTypingIndicator() {
+      const feed = document.getElementById('chat-dialog-feed');
+      const loader = document.createElement('div');
+      loader.id = 'typing-indicator';
+      loader.className = 'flex gap-3 justify-start items-start';
+      loader.innerHTML = `
+        <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center border border-orange-200 text-sm shrink-0 shadow-sm">🐙</div>
+        <div class="bg-white border border-[#e5e5e0] text-[#1a1a1a] text-sm rounded-2xl rounded-tl-none px-4 py-3 shadow-sm flex items-center gap-2">
+          <span class="font-bold text-xs text-[#ff6b35]">KRYON is thinking</span>
+          <span class="flex gap-1">
+            <span class="w-1.5 h-1.5 bg-[#ff6b35] rounded-full animate-bounce" style="animation-delay: 0s"></span>
+            <span class="w-1.5 h-1.5 bg-[#ff6b35] rounded-full animate-bounce" style="animation-delay: 0.2s"></span>
+            <span class="w-1.5 h-1.5 bg-[#ff6b35] rounded-full animate-bounce" style="animation-delay: 0.4s"></span>
+          </span>
+        </div>
+      `;
+      feed.appendChild(loader);
+      feed.scrollTop = feed.scrollHeight;
+    }
+
+    function removeTypingIndicator() {
+      const loader = document.getElementById('typing-indicator');
+      if (loader) loader.remove();
+    }
+
+    // Escape HTML strings
+    function escapeHtml(str) {
+      return str.replace(/[&<>'"]/g, 
+        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+      );
+    }
+
+    // Chat Form Submit Handler
+    async function handleSendChat(e) {
+      e.preventDefault();
+      const input = document.getElementById('chat-input');
+      const prompt = input.value.trim();
+      if (!prompt) return;
+
+      clearChatInputError();
+
+      // Read API Key
+      const apiKey = localStorage.getItem('kryon.gemini.api_key');
+      if (!apiKey) {
+        const err = document.getElementById('chat-error-msg');
+        err.innerText = '🔑 Add your Gemini API key in Settings first.';
+        err.classList.remove('hidden');
+        return;
+      }
+
+      // Append user prompt to bubble list
+      appendChatBubble('user', prompt);
+      input.value = '';
+
+      // Show loader
+      showTypingIndicator();
+
+      try {
+        const reply = await queryGeminiAPI(apiKey, prompt);
+        removeTypingIndicator();
+        appendChatBubble('kryon', reply);
+      } catch (err) {
+        removeTypingIndicator();
+        const errContainer = document.getElementById('chat-error-msg');
+        errContainer.innerText = `⚠️ Error: ${err.message}`;
+        errContainer.classList.remove('hidden');
+      }
+    }
+
+    // Call Gemini API request
+    // Call OpenRouter API request (retains queryGeminiAPI function signature to avoid refactoring calls)
+    async function queryGeminiAPI(apiKey, messageText, modelOverride = null) {
+      const model = modelOverride || localStorage.getItem('kryon.gemini.model') || 'dots-studio/dots-3-note-preview:free';
+      const url = `https://openrouter.ai/api/v1/chat/completions`;
+
+      const systemInstruction = `You are KRYON, a friendly AI operations assistant. You help the user with
+questions, planning, and analysis. You have a playful personality — you like
+octopuses because you have eight "arms" of capability. Keep responses
+concise (1-3 paragraphs max) unless the user asks for detail. Use markdown
+formatting when helpful. You're running in "October Mode" — a friendly,
+welcoming, slightly playful vibe.`;
+
+      let response;
+      try {
+        response = await fetch(url, {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`,
+            'HTTP-Referer': 'http://localhost:8000',
+            'X-Title': 'Kryon Dashboard'
+          },
+          body: JSON.stringify({
+            model: model,
+            messages: [
+              {
+                role: 'system',
+                content: systemInstruction
+              },
+              {
+                role: 'user',
+                content: messageText
+              }
+            ],
+            temperature: 0.7,
+            max_tokens: 1024
+          }),
+        });
+      } catch (networkErr) {
+        throw new Error(`Network error — check your connection or CORS restriction: ${networkErr.message}`);
+      }
+
+      if (!response.ok) {
+        let errMsg = `HTTP error ${response.status} — ${response.statusText}`;
+        try {
+          const errData = await response.json();
+          if (errData.error && errData.error.message) {
+            errMsg = errData.error.message;
+          }
+        } catch (e) {}
+        throw new Error(errMsg);
+      }
+
+      const data = await response.json();
+      if (data.error) {
+        throw new Error(data.error.message);
+      }
+
+      if (!data.choices || data.choices.length === 0 || !data.choices[0].message) {
+        throw new Error('Empty response received from OpenRouter.');
+      }
+
+      return data.choices[0].message.content;
+    }
+
+    // Verify OpenRouter connection in settings
+    async function testGeminiConnection() {
+      const input = document.getElementById('gemini-key-input');
+      const apiKey = input.value.trim();
+      const model = document.getElementById('gemini-model-select').value;
+      const statusDiv = document.getElementById('test-connection-status');
+      const testBtn = document.getElementById('test-conn-btn');
+
+      if (!apiKey) {
+        statusDiv.className = 'text-xs font-semibold mt-1 text-red-500 block';
+        statusDiv.innerText = '❌ Please enter an API key first.';
+        return;
+      }
+
+      statusDiv.className = 'text-xs font-semibold mt-1 text-gray-500 block';
+      statusDiv.innerText = '⌛ Connecting to OpenRouter...';
+      testBtn.disabled = true;
+
+      try {
+        const reply = await queryGeminiAPI(apiKey, 'Hi', model);
+        statusDiv.className = 'text-xs font-semibold mt-1 text-[#10b981] block';
+        statusDiv.innerText = '✅ Connected successfully!';
+      } catch (err) {
+        statusDiv.className = 'text-xs font-semibold mt-1 text-red-500 block';
+        statusDiv.innerText = `❌ Connection failed: ${err.message}`;
+      } finally {
+        testBtn.disabled = false;
+      }
+    }
+
+    // List available models from OpenRouter API key
+    async function listAvailableModels() {
+      const input = document.getElementById('gemini-key-input');
+      const apiKey = input.value.trim();
+      const listDiv = document.getElementById('available-models-list');
+      const btn = document.getElementById('list-models-btn');
+
+      if (!apiKey) {
+        alert('Please enter an API key first.');
+        return;
+      }
+
+      listDiv.classList.remove('hidden');
+      listDiv.className = 'text-xs bg-gray-50 border border-[#e5e5e0] rounded-xl p-3 max-h-48 overflow-y-auto block mt-2 text-gray-600 font-mono';
+      listDiv.innerText = '⌛ Querying available models from OpenRouter...';
+      btn.disabled = true;
+
+      try {
+        const url = `https://openrouter.ai/api/v1/models`;
+        const response = await fetch(url, {
+          headers: {
+            'Authorization': `Bearer ${apiKey}`
+          }
+        });
+        if (!response.ok) {
+          let errMsg = `HTTP error ${response.status} — ${response.statusText}`;
+          try {
+            const errData = await response.json();
+            if (errData.error && errData.error.message) {
+              errMsg = errData.error.message;
+            }
+          } catch (e) {}
+          throw new Error(errMsg);
+        }
+        const data = await response.json();
+        if (!data.data || data.data.length === 0) {
+          listDiv.innerText = 'No models found for this API key.';
+          return;
+        }
+        
+        let html = `<div class="font-bold text-[#ff6b35] mb-1.5 uppercase text-[10px] tracking-wider">Supported OpenRouter Models:</div>`;
+        data.data.forEach(m => {
+          const modelId = m.id;
+          const isFree = modelId.includes(':free') || (m.pricing && parseFloat(m.pricing.prompt) === 0);
+          html += `<div class="flex items-center justify-between border-b border-gray-100 py-1.5 font-mono">
+            <span class="truncate pr-4">${modelId}</span>
+            <span class="text-[9px] px-1.5 py-0.5 rounded font-semibold shrink-0 ${isFree ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-gray-100 text-gray-400'}">
+              ${isFree ? 'Free' : 'Paid'}
+            </span>
+          </div>`;
+        });
+        listDiv.innerHTML = html;
+      } catch (err) {
+        listDiv.innerText = `❌ Error listing models: ${err.message}`;
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    // Initialize 8-Tentacle Playground Coordinates & SVG Paths
+    function initPlayground() {
+      const container = document.getElementById('testing-playground');
+      if (!container || container.classList.contains('hidden')) return;
+
+      const head = document.getElementById('octopus-head');
+      const svg = document.getElementById('tentacles-svg');
+
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+      const cx = width / 2;
+      const cy = height / 2;
+      
+      // Compute radial bounds
+      const r = Math.min(width, height) * 0.36;
+
+      // Position center head
+      head.style.left = `${cx - 48}px`;
+      head.style.top = `${cy - 48}px`;
+
+      // Clear previous paths and nodes
+      svg.innerHTML = '';
+      document.querySelectorAll('.agent-node').forEach(el => el.remove());
+
+      agentsData.forEach((agent, index) => {
+        // Distribute agents starting from top (-90 degrees)
+        const angle = (index * 45 - 90) * (Math.PI / 180);
+        const ax = cx + r * Math.cos(angle);
+        const ay = cy + r * Math.sin(angle);
+
+        // Draw wavy tentacle path
+        // Control point adds curvature to give an organic octopus feel
+        const ctrlAngle = angle - 0.22;
+        const ctrlX = cx + (r * 0.5) * Math.cos(ctrlAngle);
+        const ctrlY = cy + (r * 0.5) * Math.sin(ctrlAngle);
+
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', `M ${cx} ${cy} Q ${ctrlX} ${ctrlY} ${ax} ${ay}`);
+        path.setAttribute('stroke', '#ff6b35');
+        path.setAttribute('stroke-width', '5');
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke-linecap', 'round');
+        path.setAttribute('class', 'tentacle-path transition-all duration-300 opacity-[0.55]');
+        path.setAttribute('id', `tentacle-${agent.id}`);
+        svg.appendChild(path);
+
+        // Create HTML Node for Cube Agent
+        const node = document.createElement('div');
+        node.className = 'agent-node absolute flex flex-col items-center z-10';
+        node.style.left = `${ax - 28}px`; // half of cube width (56px)
+        node.style.top = `${ay - 44}px`;
+        node.id = `node-${agent.id}`;
+        
+        node.innerHTML = `
+          <div class="relative group cube-container">
+            <!-- 3D styled cube box -->
+            <div class="w-14 h-14 border-2 rounded-2xl shadow-md flex items-center justify-center transition-all duration-300 group-hover:scale-105 group-hover:shadow-lg cube-inner ${agent.bgClass}" id="cube-${agent.id}">
+              <div class="flex gap-1.5 justify-center items-center">
+                <!-- Eye 1 -->
+                <div class="w-2.5 h-2.5 bg-white rounded-full flex items-center justify-center relative eye">
+                  <div class="w-1 h-1 bg-black rounded-full absolute top-[1px] left-[1px]"></div>
+                </div>
+                <!-- Eye 2 -->
+                <div class="w-2.5 h-2.5 bg-white rounded-full flex items-center justify-center relative eye">
+                  <div class="w-1 h-1 bg-black rounded-full absolute top-[1px] left-[1px]"></div>
+                </div>
+              </div>
+            </div>
+            <!-- Tooltip -->
+            <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-[10px] px-2 py-1 rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-30 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-gray-400 status-dot" id="dot-${agent.id}"></span>
+              <span class="status-text font-medium" id="status-${agent.id}">Standing by</span>
+            </div>
+          </div>
+          <span class="text-[9px] font-mono text-gray-500 mt-1.5 bg-[#f5f4ef] px-1.5 py-0.5 rounded border border-[#e5e5e0]">${agent.label}</span>
+        `;
+
+        // Hover events to light up paths
+        node.addEventListener('mouseenter', () => {
+          path.setAttribute('stroke', '#ff6b35');
+          path.setAttribute('stroke-width', '8');
+          path.setAttribute('class', 'tentacle-path transition-all duration-300 opacity-100');
+        });
+        node.addEventListener('mouseleave', () => {
+          if (!node.classList.contains('active-agent-glow')) {
+            path.setAttribute('stroke', '#ff6b35');
+            path.setAttribute('stroke-width', '5');
+            path.setAttribute('class', 'tentacle-path transition-all duration-300 opacity-[0.55]');
+          }
+        });
+
+        container.appendChild(node);
+      });
+    }
+
+    // AI Testing Sequential Simulation Run
+    let isRunningTest = false;
+    function startTestRun() {
+      if (isRunningTest) return;
+
+      const target = document.getElementById('testing-target').value.trim();
+      const scope = document.getElementById('testing-scope').value.trim();
+      const permission = document.getElementById('testing-permission').value.trim();
+      const logConsole = document.getElementById('test-console-logs');
+
+      if (!target || !scope || !permission) {
+        logConsole.innerHTML = `<div class="text-[#ef4444] font-semibold">[SYSTEM] [ERROR] Target, In-Scope, and Permission Letter are required to run security tests.</div>`;
+        logConsole.scrollTop = logConsole.scrollHeight;
+        return;
+      }
+
+      isRunningTest = true;
+
+      const btn = document.getElementById('start-test-btn');
+      btn.disabled = true;
+      btn.innerHTML = `<span>⏳</span> Testing...`;
+      btn.classList.add('opacity-50', 'cursor-not-allowed');
+
+      logConsole.innerHTML = `<div class="text-[#ff6b35] font-semibold">[SYSTEM] Initializing 8-agent testing sequence on target: ${escapeHtml(target)} (Scope: ${escapeHtml(scope)})...</div>`;
+      logConsole.innerHTML += `<div class="text-gray-400 mt-1">[SYSTEM] Authorization confirmed. Permission letter valid.</div>`;
+      logConsole.scrollTop = logConsole.scrollHeight;
+
+      let currentStep = 0;
+
+      function runNextStep() {
+        if (currentStep >= agentsData.length) {
+          // Finish run
+          setTimeout(() => {
+            logConsole.innerHTML += `<div class="text-[#10b981] font-semibold mt-1">[SYSTEM] Run completed. Security posture: SECURE. Report generated!</div>`;
+            logConsole.scrollTop = logConsole.scrollHeight;
+
+            // Reset Agent Node highlights
+            agentsData.forEach(agent => {
+              const path = document.getElementById(`tentacle-${agent.id}`);
+              if (path) {
+                path.setAttribute('stroke', '#ff6b35');
+                path.setAttribute('stroke-width', '5');
+                path.setAttribute('class', 'tentacle-path transition-all duration-300 opacity-[0.55]');
+              }
+
+              const cube = document.getElementById(`cube-${agent.id}`);
+              if (cube) {
+                cube.classList.remove('animate-bounce', 'ring-4', 'ring-[#10b981]');
+              }
+
+              const dot = document.getElementById(`dot-${agent.id}`);
+              if (dot) dot.className = 'w-1.5 h-1.5 rounded-full bg-gray-400 status-dot';
+
+              const status = document.getElementById(`status-${agent.id}`);
+              if (status) status.innerText = 'Standing by';
+            });
+
+            isRunningTest = false;
+            btn.disabled = false;
+            btn.innerHTML = `▶ Start test run`;
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+          }, 1500);
+          return;
+        }
+
+        const agent = agentsData[currentStep];
+        const path = document.getElementById(`tentacle-${agent.id}`);
+        const cube = document.getElementById(`cube-${agent.id}`);
+        const dot = document.getElementById(`dot-${agent.id}`);
+        const status = document.getElementById(`status-${agent.id}`);
+        const node = document.getElementById(`node-${agent.id}`);
+
+        // Set path to active green
+        if (path) {
+          path.setAttribute('stroke', '#10b981');
+          path.setAttribute('stroke-width', '8');
+          path.setAttribute('class', 'tentacle-path transition-all duration-300 opacity-100');
+        }
+
+        if (cube) {
+          cube.classList.add('animate-bounce', 'ring-4', 'ring-[#10b981]');
+        }
+        
+        if (dot) {
+          dot.className = 'w-1.5 h-1.5 rounded-full bg-[#10b981] status-dot animate-pulse';
+        }
+        
+        if (status) {
+          status.innerText = 'Active (Working...)';
+        }
+
+        const time = new Date().toLocaleTimeString();
+        const actionLogs = {
+          'recon-passive': ['Performing domain lookup and OSINT scan...', 'Discovered target subdomains and active hosts.'],
+          'recon-active': ['Initiating active port scans and service detection...', 'Identified open ports 80, 443, and 8080.'],
+          'analysis-hypothesis': ['Analyzing active services for vulnerabilities...', 'Hypothesis generated: Potential CVE-2023-3824 on port 8080.'],
+          'exploit': ['Executing validation payloads for CVE-2023-3824...', 'Exploitation successful. Session established.'],
+          'post-exploit': ['Enumerating internal system configuration...', 'Retrieved local logs and environment configurations.'],
+          'verify': ['Validating persistence and access boundaries...', 'Verification complete. Security boundary confirmed.'],
+          'blue-team': ['Verifying telemetry logs and defense alerts...', 'Alert confirmed and logged in SIEM dashboard.'],
+          'report': ['Aggregating findings and compiling executive summary...', 'Report formatted: 1 high severity, 0 medium severity vulnerabilities.']
+        };
+
+        const logs = actionLogs[agent.id];
+        
+        logConsole.innerHTML += `<div class="text-gray-300 mt-1"><span class="text-gray-500 font-mono text-[10px]">[${time}]</span> <span class="font-semibold text-orange-400">[${agent.label}]</span> ${logs[0]}</div>`;
+        logConsole.scrollTop = logConsole.scrollHeight;
+
+        setTimeout(() => {
+          logConsole.innerHTML += `<div class="text-gray-300"><span class="text-gray-500 font-mono text-[10px]">[${time}]</span> <span class="font-semibold text-orange-400">[${agent.label}]</span> ${logs[1]}</div>`;
+          logConsole.scrollTop = logConsole.scrollHeight;
+
+          // Mark node done
+          if (cube) {
+            cube.classList.remove('animate-bounce', 'ring-4', 'ring-[#10b981]');
+          }
+          if (status) {
+            status.innerText = 'Idle (Done)';
+          }
+          if (dot) {
+            dot.className = 'w-1.5 h-1.5 rounded-full bg-gray-400 status-dot';
+          }
+
+          currentStep++;
+          runNextStep();
+        }, 1500);
+      }
+
+      runNextStep();
+    }
+  </script>
+</body>
+</html>
