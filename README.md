@@ -4,6 +4,8 @@
 
 **Kryon is currently a front-end prototype.** It demonstrates the operator experience and orchestration model; it does not connect to LLMs, scan targets, run security tools, or create real findings.
 
+Video: https://youtu.be/Viyo02AG5cg
+
 ## What is here
 
 Kryon is a single-page, dependency-free interface for exploring a safer model of AI-assisted security research. The prototype lets you switch between a standard chat view and a mission-control view, step through an eight-agent workflow, inspect each agent’s role, and review a simulated report.
